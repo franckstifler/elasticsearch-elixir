@@ -63,7 +63,7 @@ defmodule Elasticsearch.Index do
 
       indexes =
         indexes
-        |> Enum.map(&(&elem(&1, 0)))
+        |> Enum.map(&elem(&1, 0))
         |> Enum.filter(&Regex.match?(regex, &1))
         |> Enum.sort()
 
