@@ -57,13 +57,13 @@ defmodule Elasticsearch.Index do
           {:ok, [String.t()]}
           | {:error, Elasticsearch.Exception.t()}
   def starting_with(cluster, prefix) do
-    with {:ok, indexes} <- Elasticsearch.get(cluster, "/_cat/indices?format=json") do
+    with {:ok, indexes} <- Elasticsearch.get(cluster, "/_aliases?format=json") do
       prefix = prefix |> to_string() |> Regex.escape()
       {:ok, regex} = Regex.compile("^#{prefix}-[0-9]+$")
 
       indexes =
         indexes
-        |> Enum.map(& &1["index"])
+        |> Enum.map(&(&elem(&1, 0)))
         |> Enum.filter(&Regex.match?(regex, &1))
         |> Enum.sort()
 
